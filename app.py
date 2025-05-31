@@ -1,12 +1,20 @@
 from authentication import register, login
+from projects import create_project
+from utils.output_utils import print_red, print_green
+
+BOLD = "\033[1m"
+END = "\033[0m"
+
 while True:
     print("╔════════════════════════════════════╗")
-    print("║      Welcome to Fund Flow!         ║")
+    print("║                                    ║")
+    print(f"║      {BOLD}Welcome to Fund Flow!{END}         ║")
     print("║  Your personal finance companion.  ║")
     print("║                                    ║")
     print("║  1) Register                       ║")
     print("║  2) Login                          ║")
     print("║  3) Exit                           ║")
+    print("║                                    ║")
     print("╚════════════════════════════════════╝")
 
     choice = input("Choose an option: ")
@@ -16,22 +24,35 @@ while True:
     elif choice == "2":
         user = login()
         if user:
-            print("╔════════════════════════════════════╗")
-            print("║           Projects Menu            ║")
-            print("║                                    ║")
-            print("║  1) Create Project                 ║")
-            print("║  2) View Projects                  ║")
-            print("║  3) Edit Project                   ║")
-            print("║  4) Delete Project                 ║")
-            print("║  5) Search Project                 ║")
-            print("║  6) Logout                         ║")
-            print("╚════════════════════════════════════╝")
+            while True:
+                print("╔════════════════════════════════════╗")
+                print(f"║           {BOLD}Projects Menu{END}            ║")
+                print("║                                    ║")
+                print("║  1) Create Project                 ║")
+                print("║  2) View Projects                  ║")
+                print("║  3) Edit Project                   ║")
+                print("║  4) Delete Project                 ║")
+                print("║  5) Search Project                 ║")
+                print("║  6) Logout                         ║")
+                print("╚════════════════════════════════════╝")
 
-            choice = input("Choose an option: ")
+                choice = input("Choose an option: ")
+
+                if choice == "1":
+                    create_project(user["email"])
+                elif choice == "2":
+                    pass
+                elif choice == "3":
+                    pass
+                elif choice == "4":
+                    pass
+                elif choice == "5":
+                    pass
+                elif choice == "6":
+                    break
 
     elif choice == "3":
-        print("Thank you for using Fund Flow. Goodbye!")
+        print_green("Thank you for using Fund Flow. Goodbye!\n")
         break
     else:
-        print('Error: Invalid option. please try again')
-        print()
+        print_red("Error: Invalid option. please try again\n")
