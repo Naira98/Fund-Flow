@@ -7,41 +7,35 @@ from utils.validations import (
     validate_password_match,
     validate_egyptian_phone,
 )
-from utils.json_utils import write_json
+from utils.json_utils import write_json, read_json
 from utils.output_utils import print_green, print_red
 
+
 def register():
-    is_valid_user = True
     print()
 
     first_name = input("First Name: ").strip()
-    is_valid_user = validate_empty_str(first_name)
-    if not is_valid_user:
+    if not validate_empty_str(first_name):
         return False
 
     last_name = input("Last Name: ").strip()
-    is_valid_user = validate_empty_str(last_name)
-    if not is_valid_user:
+    if not validate_empty_str(last_name):
         return False
 
     email = input("Email: ").strip()
-    is_valid_user = validate_email(email)
-    if not is_valid_user:
+    if not validate_email(email):
         return False
 
     password = getpass().strip()
-    is_valid_user = validate_empty_str(password)
-    if not is_valid_user:
+    if not validate_empty_str(password):
         return False
 
     confirm_password = getpass("Confirm Password: ").strip()
-    is_valid_user = validate_password_match(password, confirm_password)
-    if not is_valid_user:
+    if not validate_password_match(password, confirm_password):
         return False
 
     phone = input("Phone: ").strip()
-    is_valid_user = validate_egyptian_phone(phone)
-    if not is_valid_user:
+    if not validate_egyptian_phone(phone):
         print("Error: Phone isn't a valid egyptian number\n")
         return False
 
@@ -65,13 +59,13 @@ def login():
     email = input("Email: ").strip()
     password = getpass().strip()
 
-    if os.path.exists("users.json"):
-        with open("users.json", "r") as file:
-            users_data = json.load(file)
-            user = next((user for user in users_data if user["email"] == email), None)
+    users_data = read_json("users.json")
 
-            if user is not None and user["password"] == password:
-                return user
+    if users_data is not None:
+        user = next((user for user in users_data if user["email"] == email), None)
+
+        if user is not None and user["password"] == password:
+            return user
 
     print_red("Error: Incorrect email or password\n")
     return False

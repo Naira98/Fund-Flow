@@ -5,7 +5,7 @@ from utils.validations import (
     convert_to_date,
     validate_end_date_after_start_date,
 )
-from utils.json_utils import write_json
+from utils.json_utils import write_json, read_json
 from utils.output_utils import print_green
 
 
@@ -56,3 +56,30 @@ def create_project(email):
     write_json(project, "projects.json")
 
     print_green("Project created successfully\n")
+
+
+def view_projects(email):
+    projects_date = read_json("projects.json")
+
+    if projects_date is not None:
+        user_projects = [
+            project for project in projects_date if project["owner"] == email
+        ]
+
+        if not user_projects:
+            print("No projects found for this user.\n")
+            return
+        
+        print("\nYour Projects:")
+        print("=" * 40)
+        for idx, project in enumerate(user_projects, 1):
+            print(f"Project #{idx}")
+            print("-" * 40)
+            print(f"Title        : {project['title']}")
+            print(f"Details      : {project['details']}")
+            print(f"Target Amount: {project['amount']} EGP")
+            print(f"Start Date   : {project['start_date']}")
+            print(f"End Date     : {project['end_date']}")
+            print("=" * 40)
+
+        # TODO:PRINT DATA IN DYNAMIC TABLE
