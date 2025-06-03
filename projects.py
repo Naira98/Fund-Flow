@@ -6,42 +6,33 @@ from utils.validations import (
     validate_end_date_after_start_date,
 )
 from utils.json_utils import add_to_json, delete_from_json, read_json
-from utils.output_utils import print_green, print_red
+from utils.output_utils import print_green, print_red, show_projects
 
 
 def create_project(email):
-    is_valid_project = True
-    print()
-
-    title = input("Title: ").strip()
-    is_valid_project = validate_empty_str(title)
-    if not is_valid_project:
+    title = input("\nTitle: ").strip()
+    if not validate_empty_str(title):
         return False
 
     details = input("Details: ").strip()
-    is_valid_project = validate_empty_str(details)
-    if not is_valid_project:
+    if not validate_empty_str(details):
         return False
 
     amount = input("Traget amount (EGP): ").strip()
-    is_valid_project = validate_money(amount)
-    if not is_valid_project:
+    if not validate_money(amount):
         return False
 
     start_date = input("Start date (YYYY-MM-DD): ").strip()
-    is_valid_project = validate_date(start_date)
-    if not is_valid_project:
+    if not validate_date(start_date):
         return False
     start_date = convert_to_date(start_date)
 
     end_date = input("End date (YYYY-MM-DD): ").strip()
-    is_valid_project = validate_date(end_date)
-    if not is_valid_project:
+    if not validate_date(end_date):
         return False
 
     end_date = convert_to_date(end_date)
-    is_valid_project = validate_end_date_after_start_date(start_date, end_date)
-    if not is_valid_project:
+    if not validate_end_date_after_start_date(start_date, end_date):
         return False
 
     # Get new project index from file
@@ -70,28 +61,12 @@ def create_project(email):
 def view_projects(email):
     projects_data = read_json("projects.json")
 
-    if projects_data is not None:
-        user_projects = [
-            project for project in projects_data if project["owner"] == email
-        ]
+    # if projects_data is not None:
+    #     user_projects = [
+    #         project for project in projects_data if project["owner"] == email
+    #     ]
 
-        if not user_projects:
-            print("No projects found for this user.\n")
-            return
-
-        print("\nYour Projects:")
-        print("=" * 40)
-        for idx, project in enumerate(user_projects, 1):
-            print(f"Project #{idx}")
-            print("-" * 40)
-            print(f"Title        : {project['title']}")
-            print(f"Details      : {project['details']}")
-            print(f"Target Amount: {project['amount']} EGP")
-            print(f"Start Date   : {project['start_date']}")
-            print(f"End Date     : {project['end_date']}")
-            print("=" * 40)
-
-        # TODO:PRINT DATA IN DYNAMIC TABLE
+    show_projects(projects_data)
 
 
 def delete_project(email):
@@ -124,6 +99,28 @@ def delete_project(email):
             lambda project: project["id"] == project_to_delete["id"],
             "projects.json",
         )
-        print_green(f"Project \'{project_to_delete['title']}\' deleted successfully.\n")
+        print_green(f"Project '{project_to_delete['title']}' deleted successfully.\n")
     except Exception:
         print_red("Error: Invalid project number\n")
+
+
+def search_by_date():
+    date = input("\nDate (YYYY-MM-DD): ").strip()
+
+    if not validate_date(date):
+        return False
+
+    projects_data = read_json("projects.json")
+    if projects_data is None:
+        print_red("No projects data found.\n")
+        return
+
+    projects = list(
+        filter(
+            lambda project: isinstance(project, dict)
+            and (project.get("start_date") == date or project.get("end_date") == date),
+            projects_data,
+        )
+    )
+
+    show_projects(projects)
