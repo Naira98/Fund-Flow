@@ -6,7 +6,12 @@ from utils.validations import (
     validate_end_date_after_start_date,
 )
 from utils.json_utils import add_to_json, delete_from_json, read_json
-from utils.output_utils import print_green, print_red, show_projects
+from utils.output_utils import (
+    print_green,
+    print_red,
+    show_projects,
+    choose_from_your_projects,
+)
 
 
 def create_project(email):
@@ -58,50 +63,21 @@ def create_project(email):
     print_green("Project created successfully\n")
 
 
-def view_projects(email):
+def view_projects():
     projects_data = read_json("projects.json")
-
-    # if projects_data is not None:
-    #     user_projects = [
-    #         project for project in projects_data if project["owner"] == email
-    #     ]
-
     show_projects(projects_data)
 
 
 def delete_project(email):
-    projects_data = read_json("projects.json")
-    if projects_data is None:
-        print_red("No projects data found.\n")
+    choosen_project = choose_from_your_projects(email, "delete")
+    if choosen_project is None:
         return
 
-    user_projects = list(
-        filter(
-            lambda project: isinstance(project, dict) and project.get("owner") == email,
-            projects_data,
-        )
+    delete_from_json(
+        lambda project: project["id"] == choosen_project["id"],
+        "projects.json",
     )
-
-    if not user_projects:
-        print_red("No projects data is found owned by you.\n")
-        return
-
-    print("Your Projects")
-    for idx, project in enumerate(user_projects, 1):
-        print(f"{idx}) {project['title']}")
-
-    try:
-        project_no = int(input("Enter project number to delete: "))
-        if project_no < 1 or project_no > len(user_projects):
-            raise ValueError()
-        project_to_delete = user_projects[project_no - 1]
-        delete_from_json(
-            lambda project: project["id"] == project_to_delete["id"],
-            "projects.json",
-        )
-        print_green(f"Project '{project_to_delete['title']}' deleted successfully.\n")
-    except Exception:
-        print_red("Error: Invalid project number\n")
+    print_green(f"Project '{choosen_project['title']}' deleted successfully.\n")
 
 
 def search_by_date():
@@ -124,3 +100,10 @@ def search_by_date():
     )
 
     show_projects(projects)
+
+
+def edit_project(email):
+    choosen_project = choose_from_your_projects(email, "edit")
+    if choosen_project is None:
+        return
+    pass

@@ -1,5 +1,5 @@
 from authentication import register, login
-from projects import create_project, view_projects, delete_project, search_by_date
+from projects import create_project, view_projects, delete_project, search_by_date, edit_project
 from utils.output_utils import print_red, print_green
 
 BOLD = "\033[1m"
@@ -41,9 +41,9 @@ while True:
                 if choice == "1":
                     create_project(user["email"])
                 elif choice == "2":
-                    view_projects(user["email"])
+                    view_projects()
                 elif choice == "3":
-                    pass
+                    edit_project(user["email"])
                 elif choice == "4":
                     delete_project(user["email"])
                 elif choice == "5":
