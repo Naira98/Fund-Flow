@@ -7,7 +7,7 @@ from utils.validations import (
     validate_password_match,
     validate_egyptian_phone,
 )
-from utils.json_utils import write_json, read_json
+from utils.json_utils import add_to_json, read_json
 from utils.output_utils import print_green, print_red
 
 
@@ -49,7 +49,7 @@ def register():
         "phone": phone,
     }
 
-    write_json(user, "users.json")
+    add_to_json(user, "users.json")
 
     print_green("Registeration done successfully\n")
 
