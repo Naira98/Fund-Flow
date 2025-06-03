@@ -5,8 +5,8 @@ from utils.validations import (
     convert_to_date,
     validate_end_date_after_start_date,
 )
-from utils.json_utils import write_json, read_json
-from utils.output_utils import print_green
+from utils.json_utils import add_to_json, delete_from_json, read_json
+from utils.output_utils import print_green, print_red
 
 
 def create_project(email):
@@ -44,7 +44,16 @@ def create_project(email):
     if not is_valid_project:
         return False
 
+    # Get new project index from file
+    projects_data = read_json("projects.json")
+    if projects_data and isinstance(projects_data, list):
+        max_id = max((project.get("id", 0) for project in projects_data), default=0)
+        id = max_id + 1
+    else:
+        id = 1
+
     project = {
+        "id": id,
         "owner": email,
         "title": title,
         "details": details,
@@ -53,23 +62,23 @@ def create_project(email):
         "end_date": end_date.strftime("%Y-%m-%d"),
     }
 
-    write_json(project, "projects.json")
+    add_to_json(project, "projects.json")
 
     print_green("Project created successfully\n")
 
 
 def view_projects(email):
-    projects_date = read_json("projects.json")
+    projects_data = read_json("projects.json")
 
-    if projects_date is not None:
+    if projects_data is not None:
         user_projects = [
-            project for project in projects_date if project["owner"] == email
+            project for project in projects_data if project["owner"] == email
         ]
 
         if not user_projects:
             print("No projects found for this user.\n")
             return
-        
+
         print("\nYour Projects:")
         print("=" * 40)
         for idx, project in enumerate(user_projects, 1):
@@ -83,3 +92,38 @@ def view_projects(email):
             print("=" * 40)
 
         # TODO:PRINT DATA IN DYNAMIC TABLE
+
+
+def delete_project(email):
+    projects_data = read_json("projects.json")
+    if projects_data is None:
+        print_red("No projects data found.\n")
+        return
+
+    user_projects = list(
+        filter(
+            lambda project: isinstance(project, dict) and project.get("owner") == email,
+            projects_data,
+        )
+    )
+
+    if not user_projects:
+        print_red("No projects data is found owned by you.\n")
+        return
+
+    print("Your Projects")
+    for idx, project in enumerate(user_projects, 1):
+        print(f"{idx}) {project['title']}")
+
+    try:
+        project_no = int(input("Enter project number to delete: "))
+        if project_no < 1 or project_no > len(user_projects):
+            raise ValueError()
+        project_to_delete = user_projects[project_no - 1]
+        delete_from_json(
+            lambda project: project["id"] == project_to_delete["id"],
+            "projects.json",
+        )
+        print_green(f"Project \'{project_to_delete['title']}\' deleted successfully.\n")
+    except Exception:
+        print_red("Error: Invalid project number\n")
