@@ -1,5 +1,5 @@
 from authentication import register, login
-from projects import create_project, view_projects, delete_project
+from projects import create_project, view_projects, delete_project, search_by_date
 from utils.output_utils import print_red, print_green
 
 BOLD = "\033[1m"
@@ -29,10 +29,10 @@ while True:
                 print(f"║           {BOLD}Projects Menu{END}            ║")
                 print("║                                    ║")
                 print("║  1) Create Project                 ║")
-                print("║  2) View Projects                  ║")
+                print("║  2) View All Projects              ║")
                 print("║  3) Edit Project                   ║")
                 print("║  4) Delete Project                 ║")
-                print("║  5) Search Project                 ║")
+                print("║  5) Search Project by Date         ║")
                 print("║  6) Logout                         ║")
                 print("╚════════════════════════════════════╝")
 
@@ -47,7 +47,7 @@ while True:
                 elif choice == "4":
                     delete_project(user["email"])
                 elif choice == "5":
-                    pass
+                    search_by_date()
                 elif choice == "6":
                     break
 
