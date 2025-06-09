@@ -17,14 +17,17 @@ def validate_email(email):
     email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     is_valid = bool(re.match(email_regex, email))
 
-    if is_valid and os.path.exists("users.json"):
-        with open("users.json", "r") as file:
-            users_data = json.load(file)
-            res = next((user for user in users_data if user["email"] == email), None)
+    if is_valid:
+        if os.path.exists("users.json"):
+            with open("users.json", "r") as file:
+                users_data = json.load(file)
+                res = next((user for user in users_data if user["email"] == email), None)
 
-            if res is not None:
-                print_red("Error: Email already exists.")
-                return False
+                if res is not None:
+                    print_red("Error: Email already exists.")
+                    return False
+        else:
+            return True
     else:
         print_red("Error: Email pattern is not valid.")
         return False

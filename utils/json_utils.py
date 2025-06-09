@@ -24,9 +24,12 @@ def delete_from_json(match_fn, filename):
         with open(filename, "r+") as file:
             file_data = json.load(file)
             new_data = [item for item in file_data if not match_fn(item)]
+            if len(new_data) == 0:
+                os.remove(filename)
             file.seek(0)
             json.dump(new_data, file, indent=4)
             file.truncate()
+
 
 def update_json_by_id(new_data, file_name):
     if os.path.exists(file_name):
@@ -44,6 +47,7 @@ def update_json_by_id(new_data, file_name):
                 file.truncate()
             return updated
     return False
+
 
 def read_json(filename):
     if os.path.exists(filename):
