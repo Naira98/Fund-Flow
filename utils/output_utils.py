@@ -16,7 +16,7 @@ def print_green(message):
 
 def show_projects(projects):
     if not projects:
-        print("No projects found for this user.\n")
+        print_red("Error: No projects found.")
         return
 
     print("\nYour Projects:")
@@ -37,7 +37,7 @@ def show_projects(projects):
 def choose_from_your_projects(email, purpose):
     projects_data = read_json("projects.json")
     if projects_data is None:
-        print_red("No projects data found.\n")
+        print_red("Error: No projects found for you.")
         return
 
     user_projects = [
@@ -46,7 +46,7 @@ def choose_from_your_projects(email, purpose):
     ]
 
     if not user_projects:
-        print_red("No projects found owned by you.\n")
+        print_red("Error: No projects found owned by you.")
         return
 
     print()

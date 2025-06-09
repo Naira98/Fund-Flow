@@ -97,7 +97,7 @@ def search_by_date():
 
     projects_data = read_json("projects.json")
     if projects_data is None:
-        print_red("No projects data found.")
+        print_red("Error: No projects found have this date.")
         return
 
     projects = list(
