@@ -67,11 +67,11 @@ def validate_money(amount):
 
 
 def validate_date(date):
-    # From 2000-01-01 To 2029-12-31
-    date_regex = r"^20[0-2][0-9]-((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])$"
+    # From 2000-01-01 To 2039-12-31
+    date_regex = r"^20[0-3][0-9]-((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])$"
     is_valid = bool(re.match(date_regex, date))
     if not is_valid:
-        print_red("Error: Date must be in a range from 2000 to 2029.")
+        print_red("Error: Date must be in a range from 2000 to 2039.")
         return False
 
     return True

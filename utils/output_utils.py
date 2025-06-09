@@ -20,18 +20,16 @@ def show_projects(projects):
         return
 
     print("\nYour Projects:")
-    print("=" * 40)
+    print("═" * 40)
     for idx, project in enumerate(projects, 1):
         print(f"Project #{idx}")
-        print("-" * 40)
+        print("─" * 40)
         print(f"Title        : {project['title']}")
         print(f"Details      : {project['details']}")
         print(f"Target Amount: {project['amount']} EGP")
         print(f"Start Date   : {project['start_date']}")
         print(f"End Date     : {project['end_date']}")
-        print("=" * 40)
-
-    # TODO:PRINT DATA IN DYNAMIC TABLE
+        print("═" * 40)
 
 
 def choose_from_your_projects(email, purpose):
