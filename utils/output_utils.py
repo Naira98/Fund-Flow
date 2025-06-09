@@ -3,15 +3,15 @@ from utils.json_utils import read_json
 
 RED = "\033[31m"
 GREEN = "\033[32m"
-NC = "\033[0m"
+END = "\033[0m"
 
 
 def print_red(message):
-    print(f"{RED}{message}{NC}")
+    print(f"{RED}{message}{END}")
 
 
 def print_green(message):
-    print(f"{GREEN}{message}{NC}")
+    print(f"{GREEN}{message}{END}")
 
 
 def show_projects(projects):
@@ -49,15 +49,19 @@ def choose_from_your_projects(email, purpose):
         print_red("No projects found owned by you.\n")
         return
 
-    print("Your Projects")
+    print()
+    print("╔══════════════════════════╗")
+    print("║      Your Projects       ║")
+    print("╚══════════════════════════╝")
+
     for idx, project in enumerate(user_projects, 1):
         print(f"{idx}) {project['title']}")
 
     try:
-        project_no = int(input(f"Enter project number to {purpose}: "))
+        project_no = int(input(f"Project number to {purpose}: "))
         if project_no < 1 or project_no > len(user_projects):
             raise ValueError()
         return user_projects[project_no - 1]
 
     except Exception:
-        print_red("Error: Invalid project number\n")
+        print_red("Error: Invalid project number.\n")

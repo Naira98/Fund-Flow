@@ -25,6 +25,7 @@ while True:
         user = login()
         if user:
             while True:
+                print()
                 print("╔════════════════════════════════════╗")
                 print(f"║           {BOLD}Projects Menu{END}            ║")
                 print("║                                    ║")
@@ -51,6 +52,8 @@ while True:
                 elif choice == "6":
                     print_green("You have been logged out. See you next time!\n")
                     break
+                else:
+                    print_red("Error: Invalid option. please try again")
 
     elif choice == "3":
         print_green("Thank you for using Fund Flow. Goodbye!\n")

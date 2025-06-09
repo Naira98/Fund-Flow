@@ -1,5 +1,5 @@
 from utils.validations import (
-    validate_empty_str,
+    validate_not_empty_str,
     validate_money,
     validate_date,
     convert_to_date,
@@ -16,30 +16,37 @@ from typing import Optional
 
 
 def create_project(email):
-    title = input("\nTitle: ").strip()
-    if not validate_empty_str(title):
-        return False
+    print()
+    while True:
+        title = input("Title: ").strip()
+        if validate_not_empty_str(title):
+            break
 
-    details = input("Details: ").strip()
-    if not validate_empty_str(details):
-        return False
+    while True:
+        details = input("Details: ").strip()
+        if validate_not_empty_str(details):
+            break
 
-    amount = input("Traget amount (EGP): ").strip()
-    if not validate_money(amount):
-        return False
+    while True:
+        amount = input("Traget amount (EGP): ").strip()
+        if validate_money(amount):
+            break
 
-    start_date = input("Start date (YYYY-MM-DD): ").strip()
-    if not validate_date(start_date):
-        return False
-    start_date = convert_to_date(start_date)
+    while True:
+        start_date = input("Start date (YYYY-MM-DD): ").strip()
+        if not validate_date(start_date):
+            continue
+        start_date = convert_to_date(start_date)
+        break
 
-    end_date = input("End date (YYYY-MM-DD): ").strip()
-    if not validate_date(end_date):
-        return False
+    while True:
+        end_date = input("End date (YYYY-MM-DD): ").strip()
+        if not validate_date(end_date):
+            continue
 
-    end_date = convert_to_date(end_date)
-    if not validate_end_date_after_start_date(start_date, end_date):
-        return False
+        end_date = convert_to_date(end_date)
+        if validate_end_date_after_start_date(start_date, end_date):
+            break
 
     # Get new project index from file
     projects_data = read_json("projects.json")
@@ -61,7 +68,7 @@ def create_project(email):
 
     add_to_json(project, "projects.json")
 
-    print_green("Project created successfully\n")
+    print_green("Project created successfully")
 
 
 def view_projects():
@@ -78,18 +85,19 @@ def delete_project(email):
         lambda project: project["id"] == choosen_project["id"],
         "projects.json",
     )
-    print_green(f"Project '{choosen_project['title']}' deleted successfully.\n")
+    print_green(f"Project '{choosen_project['title']}' deleted successfully.")
 
 
 def search_by_date():
-    date = input("\nDate (YYYY-MM-DD): ").strip()
+    print()
+    date = input("Date (YYYY-MM-DD): ").strip()
 
     if not validate_date(date):
         return False
 
     projects_data = read_json("projects.json")
     if projects_data is None:
-        print_red("No projects data found.\n")
+        print_red("No projects data found.")
         return
 
     projects = list(
@@ -118,17 +126,23 @@ def edit_project(email):
 
     while True:
         choice_number = 1
+
+        print()
+        print("╔══════════════════════════╗")
+        print("║      Project Fileds      ║")
+        print("╚══════════════════════════╝")
+
         for key, value in updated_values.items():
             print(f'{choice_number}) [{"*" if value else " "}] {key}')
             choice_number += 1
         print(f"{choice_number}) # Done")
 
         try:
-            filed_number = int(input("Select an option: "))
+            filed_number = int(input("Field number to update: "))
             if (filed_number > len(updated_values) + 1) or filed_number <= 0:
                 raise Exception()
         except:
-            print_red("Error: Invalid filed number\n")
+            print_red("Error: Invalid filed number.")
             break
 
         if 1 <= filed_number <= 5:
@@ -143,7 +157,7 @@ def edit_project(email):
                     if not validate_end_date_after_start_date(
                         start_date,
                         end_date,
-                        "Error: Cannot remove the updated start date because the end date must be after the original start date.\n",
+                        "Error: Cannot remove the updated start date because the end date must be after the original start date.",
                     ):
                         continue
 
@@ -156,7 +170,7 @@ def edit_project(email):
                     if not validate_end_date_after_start_date(
                         start_date,
                         end_date,
-                        "Error: Cannot remove the updated end date because the original end date must be after the start date.\n",
+                        "Error: Cannot remove the updated end date because the original end date must be after the start date.",
                     ):
                         continue
 
@@ -164,13 +178,13 @@ def edit_project(email):
                 continue
 
         if filed_number == 1:  # title
-            title = input("\nTitle: ").strip()
-            if validate_empty_str(title):
+            title = input("Title: ").strip()
+            if validate_not_empty_str(title):
                 updated_values["title"] = title
 
         elif filed_number == 2:  # details
             details = input("Details: ").strip()
-            if validate_empty_str(details):
+            if validate_not_empty_str(details):
                 updated_values["details"] = details
 
         elif filed_number == 3:  # amount
@@ -206,11 +220,15 @@ def edit_project(email):
             update_json_by_id(
                 {
                     **choosen_project,
-                    **{key: value for key, value in updated_values.items() if value is not None},
+                    **{
+                        key: value
+                        for key, value in updated_values.items()
+                        if value is not None
+                    },
                 },
                 "projects.json",
             )
-            print_green("Project updated successfully\n")
+            print_green("Project updated successfully")
             break
 
         continue

@@ -3,7 +3,7 @@ import json
 from getpass import getpass
 from utils.validations import (
     validate_email,
-    validate_empty_str,
+    validate_not_empty_str,
     validate_password_match,
     validate_egyptian_phone,
 )
@@ -14,30 +14,36 @@ from utils.output_utils import print_green, print_red
 def register():
     print()
 
-    first_name = input("First Name: ").strip()
-    if not validate_empty_str(first_name):
-        return False
+    while True:
+        first_name = input("First Name: ").strip()
+        if validate_not_empty_str(first_name):
+            break
 
-    last_name = input("Last Name: ").strip()
-    if not validate_empty_str(last_name):
-        return False
+    while True:
+        last_name = input("Last Name: ").strip()
+        if validate_not_empty_str(last_name):
+            break
 
-    email = input("Email: ").strip()
-    if not validate_email(email):
-        return False
+    while True:
+        email = input("Email: ").strip()
+        if validate_email(email):
+            break
 
-    password = getpass().strip()
-    if not validate_empty_str(password):
-        return False
+    while True:
+        password = getpass().strip()
+        if validate_not_empty_str(password):
+            break
 
-    confirm_password = getpass("Confirm Password: ").strip()
-    if not validate_password_match(password, confirm_password):
-        return False
+    while True:
+        confirm_password = getpass("Confirm Password: ").strip()
+        if validate_password_match(password, confirm_password):
+            break
 
-    phone = input("Phone: ").strip()
-    if not validate_egyptian_phone(phone):
-        print("Error: Phone isn't a valid egyptian number\n")
-        return False
+    while True:
+        phone = input("Phone: ").strip()
+        if validate_egyptian_phone(phone):
+            print_red("Error: Phone isn't a valid egyptian number")
+            break
 
     # TODO: HASH PASSWORD
 
