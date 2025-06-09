@@ -97,4 +97,4 @@ Once the application is set up and the Poetry shell is activated, you can run th
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the LICENSE file for details.
