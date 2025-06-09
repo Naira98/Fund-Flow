@@ -1,5 +1,3 @@
-import os
-import json
 from getpass import getpass
 from utils.validations import (
     validate_email,
