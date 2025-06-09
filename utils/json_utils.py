@@ -28,6 +28,22 @@ def delete_from_json(match_fn, filename):
             json.dump(new_data, file, indent=4)
             file.truncate()
 
+def update_json_by_id(new_data, file_name):
+    if os.path.exists(file_name):
+        with open(file_name, "r+") as file:
+            file_data = json.load(file)
+            updated = False
+            for idx, item in enumerate(file_data):
+                if item.get("id") == new_data["id"]:
+                    file_data[idx] = new_data
+                    updated = True
+                    break
+            if updated:
+                file.seek(0)
+                json.dump(file_data, file, indent=4)
+                file.truncate()
+            return updated
+    return False
 
 def read_json(filename):
     if os.path.exists(filename):

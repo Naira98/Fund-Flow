@@ -5,7 +5,7 @@ from utils.validations import (
     convert_to_date,
     validate_end_date_after_start_date,
 )
-from utils.json_utils import add_to_json, delete_from_json, read_json
+from utils.json_utils import add_to_json, delete_from_json, read_json, update_json_by_id
 from utils.output_utils import (
     print_green,
     print_red,
@@ -203,6 +203,14 @@ def edit_project(email):
                     updated_values["end_date"] = end_date.strftime("%Y-%m-%d")
 
         elif filed_number == 6:  # done
+            update_json_by_id(
+                {
+                    **choosen_project,
+                    **{key: value for key, value in updated_values.items() if value is not None},
+                },
+                "projects.json",
+            )
+            print_green("Project updated successfully\n")
             break
 
         continue
