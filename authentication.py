@@ -9,6 +9,7 @@ from utils.validations import (
 )
 from utils.json_utils import add_to_json, read_json
 from utils.output_utils import print_green, print_red
+import bcrypt
 
 
 def register():
@@ -42,16 +43,17 @@ def register():
     while True:
         phone = input("Phone: ").strip()
         if validate_egyptian_phone(phone):
-            print_red("Error: Phone isn't a valid egyptian number")
             break
 
-    # TODO: HASH PASSWORD
+
+    hashed_bytes = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    hashed_str = hashed_bytes.decode("utf-8")
 
     user = {
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
-        "password": password,
+        "password": hashed_str,
         "phone": phone,
     }
 
@@ -70,7 +72,9 @@ def login():
     if users_data is not None:
         user = next((user for user in users_data if user["email"] == email), None)
 
-        if user is not None and user["password"] == password:
+        if user is not None and bcrypt.checkpw(
+            password.encode("utf-8"), user["password"].encode("utf-8")
+        ):
             return user
 
     print_red("Error: Incorrect email or password\n")
