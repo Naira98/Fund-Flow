@@ -77,9 +77,11 @@ def convert_to_date(date):
     return date
 
 
-def validate_end_date_after_start_date(start_date, end_date):
+def validate_end_date_after_start_date(
+    start_date, end_date, error_message="Error: End date must be after start date\n"
+):
     if end_date <= start_date:
-        print_red("Error: End date must be after start date\n")
+        print_red(error_message)
         return False
 
     return True

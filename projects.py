@@ -134,6 +134,32 @@ def edit_project(email):
         if 1 <= filed_number <= 5:
             key = list(updated_values.keys())[filed_number - 1]
             if updated_values[key] is not None:
+                if key == "start_date":
+                    start_date = convert_to_date(choosen_project["start_date"])
+                    end_date = convert_to_date(
+                        updated_values["end_date"] or choosen_project["end_date"]
+                    )
+
+                    if not validate_end_date_after_start_date(
+                        start_date,
+                        end_date,
+                        "Error: Cannot remove the updated start date because the end date must be after the original start date.\n",
+                    ):
+                        continue
+
+                elif key == "end_date":
+                    start_date = convert_to_date(
+                        updated_values["start_date"] or choosen_project["start_date"]
+                    )
+                    end_date = convert_to_date(choosen_project["end_date"])
+
+                    if not validate_end_date_after_start_date(
+                        start_date,
+                        end_date,
+                        "Error: Cannot remove the updated end date because the original end date must be after the start date.\n",
+                    ):
+                        continue
+
                 updated_values[key] = None
                 continue
 
@@ -178,5 +204,5 @@ def edit_project(email):
 
         elif filed_number == 6:  # done
             break
-        
+
         continue
