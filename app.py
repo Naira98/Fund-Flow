@@ -49,6 +49,7 @@ while True:
                 elif choice == "5":
                     search_by_date()
                 elif choice == "6":
+                    print_green("You have been logged out. See you next time!\n")
                     break
 
     elif choice == "3":

@@ -40,12 +40,10 @@ def choose_from_your_projects(email, purpose):
         print_red("No projects data found.\n")
         return
 
-    user_projects = list(
-        filter(
-            lambda project: isinstance(project, dict) and project.get("owner") == email,
-            projects_data,
-        )
-    )
+    user_projects = [
+        project for project in projects_data
+        if isinstance(project, dict) and project.get("owner") == email
+    ]
 
     if not user_projects:
         print_red("No projects found owned by you.\n")
