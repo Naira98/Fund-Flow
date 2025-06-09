@@ -1,5 +1,5 @@
 from authentication import register, login
-from projects import create_project, view_projects, delete_project, search_by_date
+from projects import create_project, view_projects, delete_project, search_by_date, edit_project
 from utils.output_utils import print_red, print_green
 
 BOLD = "\033[1m"
@@ -25,6 +25,7 @@ while True:
         user = login()
         if user:
             while True:
+                print()
                 print("╔════════════════════════════════════╗")
                 print(f"║           {BOLD}Projects Menu{END}            ║")
                 print("║                                    ║")
@@ -41,15 +42,18 @@ while True:
                 if choice == "1":
                     create_project(user["email"])
                 elif choice == "2":
-                    view_projects(user["email"])
+                    view_projects()
                 elif choice == "3":
-                    pass
+                    edit_project(user["email"])
                 elif choice == "4":
                     delete_project(user["email"])
                 elif choice == "5":
                     search_by_date()
                 elif choice == "6":
+                    print_green("You have been logged out. See you next time!\n")
                     break
+                else:
+                    print_red("Error: Invalid option. please try again")
 
     elif choice == "3":
         print_green("Thank you for using Fund Flow. Goodbye!\n")

@@ -1,12 +1,18 @@
+from utils.json_utils import read_json
+
+
 RED = "\033[31m"
 GREEN = "\033[32m"
-NC = "\033[0m"
+END = "\033[0m"
+
 
 def print_red(message):
-    print(f"{RED}{message}{NC}")
+    print(f"{RED}{message}{END}")
+
 
 def print_green(message):
-    print(f"{GREEN}{message}{NC}")
+    print(f"{GREEN}{message}{END}")
+
 
 def show_projects(projects):
     if not projects:
@@ -26,3 +32,36 @@ def show_projects(projects):
         print("=" * 40)
 
     # TODO:PRINT DATA IN DYNAMIC TABLE
+
+
+def choose_from_your_projects(email, purpose):
+    projects_data = read_json("projects.json")
+    if projects_data is None:
+        print_red("No projects data found.\n")
+        return
+
+    user_projects = [
+        project for project in projects_data
+        if isinstance(project, dict) and project.get("owner") == email
+    ]
+
+    if not user_projects:
+        print_red("No projects found owned by you.\n")
+        return
+
+    print()
+    print("╔══════════════════════════╗")
+    print("║      Your Projects       ║")
+    print("╚══════════════════════════╝")
+
+    for idx, project in enumerate(user_projects, 1):
+        print(f"{idx}) {project['title']}")
+
+    try:
+        project_no = int(input(f"Project number to {purpose}: "))
+        if project_no < 1 or project_no > len(user_projects):
+            raise ValueError()
+        return user_projects[project_no - 1]
+
+    except Exception:
+        print_red("Error: Invalid project number.\n")

@@ -5,9 +5,9 @@ import datetime
 from utils.output_utils import print_red
 
 
-def validate_empty_str(str):
+def validate_not_empty_str(str):
     if len(str) == 0:
-        print_red("Error: Value can't be empty\n")
+        print_red("Error: Value can't be empty.")
         return False
 
     return True
@@ -23,15 +23,18 @@ def validate_email(email):
             res = next((user for user in users_data if user["email"] == email), None)
 
             if res is not None:
-                print_red("Error: Email already exists\n")
+                print_red("Error: Email already exists.")
                 return False
+    else:
+        print_red("Error: Email pattern is not valid.")
+        return False
 
     return True
 
 
 def validate_password_match(password, confirm_password):
     if password != confirm_password:
-        print_red("Error: Passwords don't match\n")
+        print_red("Error: Passwords don't match.")
         return False
 
     return True
@@ -41,7 +44,7 @@ def validate_egyptian_phone(phone):
     phone_regex = r"^01[0-2,5]\d{8}$"
     is_valid = bool(re.match(phone_regex, phone))
     if not is_valid:
-        print_red("Error: Phone isn't a valid egyptian number\n")
+        print_red("Error: Phone isn't a valid egyptian number.")
         return False
 
     return True
@@ -51,12 +54,12 @@ def validate_money(amount):
     try:
         target = float(amount)
         if target <= 0:
-            print_red("Error: Traget amount must be a positive number\n")
+            print_red("Error: Traget amount must be a positive number.")
             return False
         return True
 
     except ValueError:
-        print_red("Error: Traget amount must be a number\n")
+        print_red("Error: Traget amount must be a number.")
         return False
 
 
@@ -65,7 +68,7 @@ def validate_date(date):
     date_regex = r"^20[0-2][0-9]-((0[1-9])|(1[0-2]))-(0[1-9]|[1-2][0-9]|3[0-1])$"
     is_valid = bool(re.match(date_regex, date))
     if not is_valid:
-        print_red("Error: Date must be in a range from 2000 to 2029\n")
+        print_red("Error: Date must be in a range from 2000 to 2029.")
         return False
 
     return True
@@ -77,9 +80,11 @@ def convert_to_date(date):
     return date
 
 
-def validate_end_date_after_start_date(start_date, end_date):
+def validate_end_date_after_start_date(
+    start_date, end_date, error_message="Error: End date must be after start date."
+):
     if end_date <= start_date:
-        print_red("Error: End date must be after start date\n")
+        print_red(error_message)
         return False
 
     return True
