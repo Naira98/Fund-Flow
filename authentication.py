@@ -6,7 +6,7 @@ from utils.validations import (
     validate_egyptian_phone,
 )
 from utils.json_utils import add_to_json, read_json
-from utils.output_utils import print_green, print_red
+from utils.output_utils import print_green, print_red, clear_terminal, print_bold
 import bcrypt
 
 
@@ -43,7 +43,6 @@ def register():
         if validate_egyptian_phone(phone):
             break
 
-
     hashed_bytes = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
     hashed_str = hashed_bytes.decode("utf-8")
 
@@ -73,6 +72,9 @@ def login():
         if user is not None and bcrypt.checkpw(
             password.encode("utf-8"), user["password"].encode("utf-8")
         ):
+            clear_terminal()
+            print()
+            print_bold(f"            Welcome {user["first_name"]}")
             return user
 
     print_red("Error: Incorrect email or password\n")

@@ -1,5 +1,8 @@
 from utils.json_utils import read_json
+import os
 
+BOLD_ITALIC = "\033[1m\033[3m"
+BOLD = "\033[1m"
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -14,15 +17,21 @@ def print_green(message):
     print(f"{GREEN}{message}{END}")
 
 
+def print_bold(message):
+    print(f"{BOLD}{message}{END}")
+
+
 def show_projects(projects):
     if not projects:
         print_red("Error: No projects found.")
         return
 
-    print("\nYour Projects:")
+    print()
+    print("═" * 40)
+    print(f"            {BOLD_ITALIC}All Projects{END}")
     print("═" * 40)
     for idx, project in enumerate(projects, 1):
-        print(f"Project #{idx}")
+        print(f"{BOLD}Project #{idx}{END}")
         print("─" * 40)
         print(f"Title        : {project['title']}")
         print(f"Details      : {project['details']}")
@@ -39,7 +48,8 @@ def choose_from_your_projects(email, purpose):
         return
 
     user_projects = [
-        project for project in projects_data
+        project
+        for project in projects_data
         if isinstance(project, dict) and project.get("owner") == email
     ]
 
@@ -63,3 +73,7 @@ def choose_from_your_projects(email, purpose):
 
     except Exception:
         print_red("Error: Invalid project number.\n")
+
+
+def clear_terminal():
+    os.system("cls" if os.name == "nt" else "clear")

@@ -1,6 +1,6 @@
 from authentication import register, login
 from projects import create_project, view_projects, delete_project, search_by_date, edit_project
-from utils.output_utils import print_red, print_green
+from utils.output_utils import print_red, print_green, clear_terminal
 
 BOLD = "\033[1m"
 END = "\033[0m"
@@ -50,7 +50,8 @@ while True:
                 elif choice == "5":
                     search_by_date()
                 elif choice == "6":
-                    print_green("You have been logged out. See you next time!\n")
+                    clear_terminal()
+                    # print_green("You have been logged out. See you next time!\n")
                     break
                 else:
                     print_red("Error: Invalid option. please try again")
