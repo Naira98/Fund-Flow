@@ -20,6 +20,12 @@ Fund-Flow is a console-based crowd-funding application developed in Python. It p
 
     * Search for projects by date.
 
+## Demo
+
+Watch a short video demonstration of the Fund-Flow App in action:
+
+<video src="./demo_video.mov" controls autoplay loop muted width="100%"></video>
+
 ## Technologies Used
 
 * **Python 3.13**: The core programming language.
